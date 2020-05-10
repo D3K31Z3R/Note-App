@@ -1,0 +1,58 @@
+<mat-card>
+    <div class="col-sm-4 col-md-4">
+        <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input #input matInput color="primary" [value]="noteFilter.value" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+            <button color="primary" mat-icon-button matSuffix aria-label="clear" *ngIf="input.value" (click)="input.value=''; applyFilter('');">
+                <mat-icon>close</mat-icon>
+              </button>
+        </mat-form-field>
+    </div>
+    <div class="col-sm-4 col-md-4">
+        <mat-form-field>
+            <mat-select color="primary" placeholder="Category" (click)="resetFilters()" #select>
+                <mat-option color="primary" [value]="null">--</mat-option>
+                <mat-option color="primary" *ngFor="let categoryFilter of categoryList" [value]="categoryFilter" (onSelectionChange)="applyCategoryFilter(categoryFilter.name)">
+                    {{categoryFilter.name}}
+                </mat-option>
+            </mat-select>
+            <button color="primary" mat-icon-button matSuffix aria-label="clear" *ngIf="select.value" (click)="select.value=''; applyCategoryFilter('');">
+                <mat-icon>close</mat-icon>
+              </button>
+        </mat-form-field>
+        <button color="primary" mat-icon-button matTooltip="Refresh filters" (click)="resetFilters()"><mat-icon>refresh</mat-icon></button>
+    </div>
+    <div>
+        <table color="primary" #table mat-table [dataSource]="dataSource">
+
+            <ng-container color="primary" matColumnDef="content">
+                <th color="primary" mat-header-cell *matHeaderCellDef> Content </th>
+                <td mat-cell *matCellDef="let note">
+                    <mat-form-field float-label="never">
+                        <textarea matInput [(ngModel)]="note.content" #ctrl="ngModel" rows="4" [value]="note.content" (change)="editNote()"></textarea>
+                    </mat-form-field>
+                    <button mat-icon-button matTooltip="Delete Note" (click)="Delete(note.id); getNotes(user);"><mat-icon color="primary">delete</mat-icon></button>
+                    <button [disabled]="!edit" mat-icon-button matTooltip="Save edited Content" (click)="editNoteContent(note.id, note.content); disableEdit()" color="primary"><mat-icon >save</mat-icon></button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef> Category </th>
+                <td mat-cell *matCellDef="let note">
+                    <mat-form-field>
+                        <mat-select color="primary" (selectedValueChange)="note.category" [(value)]="note.category" placeholder="{{note.category}}" (valueChange)="editNote()">
+                            <mat-option color="primary" *ngFor="let category of categoryList" [value]="category" (selectionChange)="editNoteCategory(note.id, note.category); getNotes(user)">
+                                {{category.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button [disabled]="!edit" mat-icon-button matTooltip="Save new category" (click)="editNoteCategory(note.id, note.category); disableEdit()" color="primary"><mat-icon>save</mat-icon></button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef=" displayedColumns "></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns; ">
+            </tr>
+        </table>
+    </div>
+</mat-card>

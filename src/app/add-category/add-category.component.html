@@ -1,0 +1,17 @@
+<div class="container">
+    <h2 mat-dialog-title>Add New Category</h2>
+    <div>
+        <form #catForm="ngForm">
+            <div class="form-group">
+                <mat-form-field>
+                    <label for="categoryToAdd">Name</label>
+                    <input matInput type="text" class="form-control" id="categoryToAdd" [(ngModel)]="categoryToAdd" #ctrl="ngModel" name="categoryToAdd" required>
+                </mat-form-field>
+            </div>
+            <mat-dialog-actions>
+                <button class="mat-raised-button" (click)="close()">Close</button>
+                <button class="mat-raised-button mat-primary" (click)="addCategory()" [disabled]="!catForm.valid">Save</button>
+            </mat-dialog-actions>
+        </form>
+    </div>
+</div>

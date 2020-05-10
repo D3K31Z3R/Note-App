@@ -1,0 +1,11 @@
+<mat-card background-color="primary" *ngIf="user">
+    <mat-card-title text-color="primary">Hello {{user.name}}! </mat-card-title>
+    <mat-card-actions background-color="primary">
+        <button mat-stroked-button color="primary" [class.selected]="user === user" (click)="getNotes(user); noteToAdd= false;">Show notes</button>
+        <button mat-raised-button color="primary" [class.selected]="user === user" (click)="noteToAdd= true">Add a note</button>
+    </mat-card-actions>
+    <mat-card-content color="primary">
+        <app-notes-list [hidden]="noteToAdd || !viewNotes" [dataSource]="dataSource" [noteList]="noteList" [user]="user" [categoryList]="categoryList"></app-notes-list>
+        <app-add-note *ngIf="noteToAdd" [user]="user" [categoryList]="categoryList"></app-add-note>
+    </mat-card-content>
+</mat-card>
